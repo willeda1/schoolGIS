@@ -1,7 +1,11 @@
-#' runs a the app in Shiny
+#' runs the app in Shiny
+#' 
+#' This is the to level function to run the application.
 #'
 #' @import Shiny
 #' @export
+#' @examples 
+#' runApp()
 
 runApp=function(){
   

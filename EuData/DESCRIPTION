@@ -1,13 +1,13 @@
 Package: EuData
-Title: visualising health data
+Title: simple health visualisation tool
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "David",
            family = "Wille",
            role = c("aut", "cre"),
            email = "david.r.wille@gmail.com")
-Description: trying out the possibility of Shiny to present WHO/EURO region data
-   for a school outreach project. Internal, not intended for deployment
+Description: A simple Shiny demo with a colleague to try out some ideas for a school outreach programme. 
+   Is thus not intended as a serious application.
 License: What license it uses
 Encoding: UTF-8
 LazyData: true

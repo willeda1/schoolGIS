@@ -1,0 +1,68 @@
+---
+title: "Background notes"
+author: "David"
+date: "02/02/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## GIS plotting
+
+Using standard packages
+
+```{r}
+library(sp)
+library(spData)
+library(sf)
+library(tidyverse)
+```
+
+## data
+
+What countries do we have?
+
+```{r}
+a=world %>% 
+  select(region_un,iso_a2,name_long) %>%
+  filter(region_un == "Europe") 
+a$name_long
+```
+
+Can we plot them? Gives axes ...
+
+```{r}
+plot(subset(world,region_un=="Europe")["name_long"])
+axis(1)
+axis(2)
+```
+
+but the cropping is a little haphazard
+
+```{r}
+plot(subset(world,region_un=="Europe")["name_long"],
+     xlim=c(0,0.5))
+axis(1)
+axis(2)
+```
+
+
+Is ggplot better? See https://r-spatial.github.io/sf/articles/sf5.html for details
+
+
+```{r}
+ggplot()+geom_sf(data=a,aes(fill=name_long))
+```
+
+or better
+
+```{r}
+a$isSE=with(a,ifelse(name_long=="Sweden",T,F))
+ggplot()+
+  scale_fill_manual(values=c("grey","red")) +
+  geom_sf(data=a,aes(fill=isSE)) + 
+  xlim(c(-10,50)) + ylim(c(35,70))
+```
+which looks better.
