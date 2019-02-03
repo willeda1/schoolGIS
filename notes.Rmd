@@ -20,8 +20,6 @@ library(sf)
 library(tidyverse)
 ```
 
-## data
-
 What countries do we have?
 
 ```{r}
@@ -62,7 +60,92 @@ or better
 a$isSE=with(a,ifelse(name_long=="Sweden",T,F))
 ggplot()+
   scale_fill_manual(values=c("grey","red")) +
+  geom_sf(data=world,fill="white") + 
   geom_sf(data=a,aes(fill=isSE)) + 
   xlim(c(-10,50)) + ylim(c(35,70))
 ```
 which looks better.
+
+## Data
+
+### Countries
+
+Going to the WHO/EURO API
+https://gateway.euro.who.int/en/api/specification/#nav-example-2
+
+```{r}
+library(httr)
+library(jsonlite)
+```
+
+First try for a list of countries
+
+```{r}
+host="https://dw.euro.who.int"
+a=GET(paste0(host,"/api/v3/countries"))
+class(a)
+```
+```{r}
+a1=httr::content(a)
+```
+
+which is a list of countries, each with a sublist of singletons for the column entries, so
+
+```{r}
+a2=plyr::ldply(a1,unlist)
+head(a2)
+```
+
+### Datasets
+
+Can get indicators by browsing from https://gateway.euro.who.int/en/themes/ and look at the head of the .csv file
+
+```{r}
+getData=function(code){
+  a=GET(paste0(host,
+               sprintf("/api/v3/measures/%s?output=data",code)))
+  a1=httr::content(a)
+  plyr::ldply(a1$data,unlist) 
+}
+```
+
+
+```{r}
+# https://gateway.euro.who.int/en/indicators/hfa_426-3050-pure-alcohol-consumption-litres-per-capita-age-15plus/
+alcohol=getData("HFA_426")
+head(alcohol)
+str(alcohol)
+```
+
+
+```{r}
+expect1=getData("HFA_46")
+head(expect1)
+```
+
+```{r}
+prop65=getData("HFA_13")
+head(prop65)
+```
+
+### Merging
+
+Need to merge into the GIS data
+
+```{r}
+head(world)
+```
+
+which uses iso_a2 in most places
+
+```{r}
+world[is.na(world$iso_a2),]
+```
+
+but not quite:
+
+```{r}
+subset(world,name_long == "France")
+```
+ so would need to recode for iso_a2.
+
