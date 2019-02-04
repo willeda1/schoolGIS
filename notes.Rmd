@@ -128,7 +128,28 @@ prop65=getData("HFA_13")
 head(prop65)
 ```
 
-### Merging
+Need to now tidy the data
+
+```{r}
+
+tidyData=function(w){
+  w %>%
+    rename(iso3=dimensions.COUNTRY,value=value.numeric) %>%
+    select(fact_id,iso3,value) %>% 
+    mutate(value=as.numeric(as.character(value))) %>%
+    filter(iso3 != "")
+}
+head(tidyData(expect1))
+```
+
+which works: data looks almost normal ...
+
+```{r}
+qqnorm(tidyData(expect1)$value)
+```
+
+
+### Joining data
 
 Need to merge into the GIS data
 
@@ -147,5 +168,19 @@ but not quite:
 ```{r}
 subset(world,name_long == "France")
 ```
- so would need to recode for iso_a2.
+so will need to recode for iso_a2. Do this here, renaming the country code to iso2 to merge into the health data
+
+```{r}
+recodeWorld=function(w){
+  
+  # recode world data
+  w[grep("France",w$name_long),"iso_a2"]="FR"
+  w[grep("Norway",w$name_long),"iso_a2"]="NO"
+  plyr::rename(w,c("iso_a2"="iso2"))
+}
+head(recodeWorld(world))
+```
+
+ 
+ 
 
