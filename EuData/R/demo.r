@@ -9,15 +9,31 @@
 
 # Note: the name runApp() is already taken by Shiny
 
-demo=function(){
+Demo=function(){
+  data("egData")
+  
   require(shiny)
-
+  cx=reactiveValues(data=egData)
+  
   ui = fluidPage(
-    titlePanel("how healthy is Europe?")
+    titlePanel("how healthy is Europe?"),
+    tabsetPanel(
+      tabPanel("simple view",
+               simpleView("simple",cx=cx))
+    )
   )
-
-  server=function(input,output){}
-
+  
+  server=function(input,output){
+    
+    simpleView("simple",input,output,cx=cx,ui=F)
+    
+  }
+  
   shinyApp(ui=ui,server=server)
+  
 }
+
+
+  
+
 

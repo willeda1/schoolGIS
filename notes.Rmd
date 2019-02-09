@@ -183,11 +183,15 @@ head(recodeWorld(world))
 
  ### encapuslation
  
+Now coded all as functions as a library:
+
 ```{r}
-pullData(datasets=c("HFA_426")){
-  
-}
+library(EuData)
+egData=addGisData(getDatasets())
+with(egData,table(code,sex))
+save(egData,file="EuData/data/egData.rda")
 ```
- 
- 
+
+
+
 
