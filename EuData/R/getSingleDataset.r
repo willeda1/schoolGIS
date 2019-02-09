@@ -3,6 +3,8 @@
 #' Downloads the data and dimensions (country, year etc.) for a single code.
 #' Reports only single country data (returning an iso3 country code) 
 #' and converts values and years into numerical types.
+#' You can get indicator codes by browsing from \url{https://gateway.euro.who.int/en/themes/}
+#' and looking at the head of the .csv file.
 #'
 #' @param code the HFA code for the data set 
 #' @param host the WHO/EU host (use default)

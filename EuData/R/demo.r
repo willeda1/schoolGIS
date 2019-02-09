@@ -19,13 +19,16 @@ Demo=function(){
     titlePanel("how healthy is Europe?"),
     tabsetPanel(
       tabPanel("simple view",
-               simpleView("simple",cx=cx))
+               simpleView("simple",cx=cx)),
+      tabPanel("slider view",
+               sliderView("slider",cx=cx))
     )
   )
   
   server=function(input,output){
     
     simpleView("simple",input,output,cx=cx,ui=F)
+    sliderView("slider",input,output,cx=cx,ui=F)
     
   }
   

@@ -1,5 +1,8 @@
 #' download multiple datasets by code
 #'
+#' You can get indicator codes by browsing from \url{https://gateway.euro.who.int/en/themes/}
+#' and looking at the head of the .csv file.
+#'
 #' @param codes a vector of HFA codes
 #' @param host the WHO/EU host (use default)
 #'

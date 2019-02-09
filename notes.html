@@ -627,6 +627,58 @@ head(recodeWorld(world))</code></pre>
 ## 4 MULTIPOLYGON (((-122.84 49,...
 ## 5 MULTIPOLYGON (((-122.84 49,...
 ## 6 MULTIPOLYGON (((87.35997 49...</code></pre>
+<p>### encapuslation</p>
+<p>Now coded all as functions as a library:</p>
+<pre class="r"><code>library(EuData)</code></pre>
+<pre><code>## Warning: replacing previous import 'dplyr::failwith' by 'plyr::failwith'
+## when loading 'EuData'</code></pre>
+<pre><code>## Warning: replacing previous import 'dplyr::id' by 'plyr::id' when loading
+## 'EuData'</code></pre>
+<pre><code>## Warning: replacing previous import 'dplyr::summarize' by 'plyr::summarize'
+## when loading 'EuData'</code></pre>
+<pre><code>## Warning: replacing previous import 'dplyr::count' by 'plyr::count' when
+## loading 'EuData'</code></pre>
+<pre><code>## Warning: replacing previous import 'dplyr::desc' by 'plyr::desc' when
+## loading 'EuData'</code></pre>
+<pre><code>## Warning: replacing previous import 'dplyr::mutate' by 'plyr::mutate' when
+## loading 'EuData'</code></pre>
+<pre><code>## Warning: replacing previous import 'dplyr::arrange' by 'plyr::arrange' when
+## loading 'EuData'</code></pre>
+<pre><code>## Warning: replacing previous import 'dplyr::rename' by 'plyr::rename' when
+## loading 'EuData'</code></pre>
+<pre><code>## Warning: replacing previous import 'dplyr::summarise' by 'plyr::summarise'
+## when loading 'EuData'</code></pre>
+<pre><code>## Warning: replacing previous import 'jsonlite::validate' by
+## 'shiny::validate' when loading 'EuData'</code></pre>
+<pre class="r"><code>egData=addGisData(getDatasets(c(&quot;HFA_13&quot;,&quot;HFA_426&quot;,&quot;HFA_42&quot;,
+                                &quot;HFA_36&quot;,&quot;HFA_507&quot;,
+                                &quot;HFA_512&quot;,&quot;HFA_515&quot;)))</code></pre>
+<pre><code>## Loading required package: plyr</code></pre>
+<pre><code>## -------------------------------------------------------------------------</code></pre>
+<pre><code>## You have loaded plyr after dplyr - this is likely to cause problems.
+## If you need functions from both plyr and dplyr, please load plyr first, then dplyr:
+## library(plyr); library(dplyr)</code></pre>
+<pre><code>## -------------------------------------------------------------------------</code></pre>
+<pre><code>## 
+## Attaching package: 'plyr'</code></pre>
+<pre><code>## The following objects are masked from 'package:dplyr':
+## 
+##     arrange, count, desc, failwith, id, mutate, rename, summarise,
+##     summarize</code></pre>
+<pre><code>## The following object is masked from 'package:purrr':
+## 
+##     compact</code></pre>
+<pre class="r"><code>with(egData,table(code,sex))</code></pre>
+<pre><code>##          sex
+## code       ALL FEMALE MALE
+##   HFA_13  2083   2083 2083
+##   HFA_36   586    455  452
+##   HFA_42  1142      0    0
+##   HFA_426 1801      0    0
+##   HFA_507  794      0    0
+##   HFA_512  444      0    0
+##   HFA_515  923      0    0</code></pre>
+<pre class="r"><code>save(egData,file=&quot;EuData/data/egData.rda&quot;)</code></pre>
 </div>
 </div>
 

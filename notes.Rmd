@@ -187,7 +187,9 @@ Now coded all as functions as a library:
 
 ```{r}
 library(EuData)
-egData=addGisData(getDatasets())
+egData=addGisData(getDatasets(c("HFA_13","HFA_426","HFA_42",
+                                "HFA_36","HFA_507",
+                                "HFA_512","HFA_515")))
 with(egData,table(code,sex))
 save(egData,file="EuData/data/egData.rda")
 ```

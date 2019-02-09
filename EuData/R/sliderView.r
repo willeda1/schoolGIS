@@ -1,4 +1,4 @@
-#' plots a simple panel for given codes and years
+#' plots a simple slider view for given codes and years
 #' 
 #' Provides two controls - one to select the endpoint and the other 
 #' to select the year
@@ -11,23 +11,26 @@
 #'
 #' @export
 
-simpleView=function(id,input=NULL,output=NULL,ui=T,cx=NULL){
+sliderView=function(id,input=NULL,output=NULL,ui=T,cx=NULL){
   
   ns=NS(id)
 
   if (ui){
     
-    fluidPage(
-      fluidRow(
-        column(6,
-               uiOutput(ns("endpoint.choice"))),
-        column(6,
-               uiOutput(ns("year.choice")))),
-      fluidRow(
-        column(12,
-               plotOutput(ns("map"))))
-    )
+    list(titlePanel(""),
     
+    sidebarLayout(
+      sidebarPanel(
+        uiOutput(ns("endpoint.choice")),
+        uiOutput(ns("year.choice")),
+        uiOutput(ns("slider.widget")),
+        htmlOutput(ns("summary"))
+      ),
+      mainPanel(
+        plotOutput(ns("map"))
+      )
+    )
+    )
     
   } else {
     
@@ -37,14 +40,11 @@ simpleView=function(id,input=NULL,output=NULL,ui=T,cx=NULL){
     })
     
     endpoints=reactive({
-      
       # need first to remove the sticky $geom slot
       w=cx$data
       w$geom=NULL
-      
       # and now return a named list
       x=unique(w[,c("code","name")])
-      print(x)
       out=x$code
       names(out)=x$name
       out
@@ -57,12 +57,37 @@ simpleView=function(id,input=NULL,output=NULL,ui=T,cx=NULL){
       if (any(is.null(c(thisEndpoint,thisYear)))){
         NULL
       } else {
-        subset(cx$data, year == thisYear & code == thisEndpoint)
+        subset(cx$data, year == thisYear & 
+                 code == thisEndpoint &
+                 sex == "ALL"
+               )
+      }
+    })
+    
+    valueRange=reactive({
+      x=dataView()
+      if (is.null(x)){
+        NULL
+      } else {
+        range(x$value)
+      }
+    })
+    
+    output[[ns("slider.widget")]]=renderUI({
+      
+      range=valueRange()
+      
+      if (is.null(range)){
+        NULL
+      } else {
+        sliderInput(ns("slider.value"),
+                    label = "value",
+                    min=range[1],max=range[2],
+                    value=0)
       }
     })
     
     output[[ns("endpoint.choice")]]=renderUI({
-      print(endpoints())
       selectInput(ns("endpoint.selection"),
                   label="measure",
                   choices=endpoints())
@@ -82,17 +107,32 @@ simpleView=function(id,input=NULL,output=NULL,ui=T,cx=NULL){
         plot(0,0,axes=F,xlab="",ylab="",type="n")
         text(0,0,"wait...")
       } else {
+        
+        cutoff=input[[ns("slider.value")]]
+        
+        a$selected=a$value >= cutoff
+        
+
+        
         ggplot()+
-          scale_fill_distiller(palette = "Spectral") +
+          scale_fill_manual(values=c("lightblue","lightgray"),
+                            guide=F) +
           geom_sf(data=world,fill="white") + 
-          geom_sf(data=a,aes(fill=value)) +
+          geom_sf(data=a,aes(fill=!selected)) +
           xlim(c(-10,50))+ ylim(c(35,70)) +
-          ggtitle(a[1,"full_name"],
+          ggtitle(a[1,"name"],
                   subtitle=a[1,"year"])
       }
-      
-
       })
+    
+    output[[ns("summary")]]=renderText({
+      x=dataView()
+      cutoff=input[[ns("slider.value")]]
+      
+      sprintf(" %d out of %d selected",
+              sum(x$value >= cutoff),
+              nrow(x))
+    })
     
   }
 }

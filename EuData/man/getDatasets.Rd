@@ -16,7 +16,8 @@ getDatasets(codes = c("HFA_13", "HFA_426"),
 a dataset of values and dimensions
 }
 \description{
-download multiple datasets by code
+You can get indicator codes by browsing from \url{https://gateway.euro.who.int/en/themes/}
+and looking at the head of the .csv file.
 }
 \examples{
 a=getDatasets(c("HFA_13","HFA_426"))
