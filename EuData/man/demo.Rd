@@ -10,5 +10,5 @@ demo()
 This is the to level function to run the application.
 }
 \examples{
-runApp()
+demo()
 }

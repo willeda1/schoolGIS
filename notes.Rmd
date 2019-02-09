@@ -181,6 +181,13 @@ recodeWorld=function(w){
 head(recodeWorld(world))
 ```
 
+ ### encapuslation
+ 
+```{r}
+pullData(datasets=c("HFA_426")){
+  
+}
+```
  
  
 
