@@ -38,8 +38,19 @@ sliderView=function(id,input=NULL,output=NULL,ui=T,cx=NULL){
   } else {
     
     years=reactive({
-      sort(as.character(unique(cx$data$year)),
-           decreasing=T)
+      
+      selectedCode = input[[ns("endpoint.selection")]]
+      print(selectedCode)
+
+      
+      if (is.null(selectedCode)){
+        sort(as.character(unique(cx$data$year)),
+             decreasing=T)
+      } else {
+        sort(as.character(unique(subset(cx$data,
+                                        code == selectedCode)$year)),
+             decreasing=T)
+      }
     })
     
     endpoints=reactive({
