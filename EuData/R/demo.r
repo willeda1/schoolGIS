@@ -3,13 +3,31 @@
 #' This is the to level function to run the application.
 #'
 #' @import shiny
+#' @import httr
+#' @import jsonlite
+#' @import dplyr
+#' @import tidyverse
+#' @import sp
+#' @import spData
+#' @import sf
+#' 
 #' @export
 #' @examples
 #' demo()
 
 # Note: the name runApp() is already taken by Shiny
 
-Demo=function(){
+demo=function(){
+  
+  require(httr)
+  require(jsonlite)
+  require(dplyr)
+  require(tidyverse)
+  require(sp)
+  require(spData)
+  require(sf)
+  
+  
   data("egData")
   
   require(shiny)

@@ -1,6 +1,7 @@
 #' download multiple datasets by code
 #'
-#' You can get indicator codes by browsing from \url{https://gateway.euro.who.int/en/themes/}
+#' You can get indicator codes by browsing from
+#' \url{https://gateway.euro.who.int/en/datasets/european-health-for-all-database/}
 #' and looking at the head of the .csv file.
 #'
 #' @param codes a vector of HFA codes

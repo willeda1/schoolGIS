@@ -9,9 +9,12 @@
 #' @param ui TRUE for the user interface, FALSE for server
 #' @param cx a reactive list, reads data from cx$egData
 #'
+#' @import ggplot2
 #' @export
 
 simpleView=function(id,input=NULL,output=NULL,ui=T,cx=NULL){
+  
+  require(ggplot2)
   
   ns=NS(id)
 

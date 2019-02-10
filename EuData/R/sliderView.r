@@ -9,9 +9,12 @@
 #' @param ui TRUE for the user interface, FALSE for server
 #' @param cx a reactive list, reads data from cx$egData
 #'
+#' @import ggplot2
 #' @export
 
 sliderView=function(id,input=NULL,output=NULL,ui=T,cx=NULL){
+  
+  require(ggplot2)
   
   ns=NS(id)
 
@@ -80,10 +83,15 @@ sliderView=function(id,input=NULL,output=NULL,ui=T,cx=NULL){
       if (is.null(range)){
         NULL
       } else {
-        sliderInput(ns("slider.value"),
-                    label = "value",
-                    min=range[1],max=range[2],
-                    value=0)
+        
+        if (!is.finite(range[1])){
+          HTML("<b>no data - try different year</b>")
+        } else {
+          sliderInput(ns("slider.value"),
+                      label = "value",
+                      min=range[1],max=range[2],
+                      value=0)
+        }
       }
     })
     
@@ -129,9 +137,10 @@ sliderView=function(id,input=NULL,output=NULL,ui=T,cx=NULL){
       x=dataView()
       cutoff=input[[ns("slider.value")]]
       
-      sprintf(" %d out of %d selected",
+      sprintf(" %d out of %d selected<br>code: %s",
               sum(x$value >= cutoff),
-              nrow(x))
+              nrow(x),
+              input[[ns("endpoint.selection")]])
     })
     
   }
