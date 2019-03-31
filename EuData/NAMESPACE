@@ -2,6 +2,7 @@
 
 export(addGisData)
 export(demo)
+export(fetchEndpoint)
 export(getDatasets)
 export(getSingleDataset)
 export(infoPanel)
