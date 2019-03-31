@@ -17,14 +17,16 @@ simpleView=function(id,input=NULL,output=NULL,ui=T,cx=NULL){
   require(ggplot2)
   
   ns=NS(id)
-
+  
   if (ui){
     
     fluidPage(
       fluidRow(
         column(6,
                uiOutput(ns("endpoint.choice"))),
-        column(6,
+        column(3,
+               uiOutput(ns("gender.choice"))),
+        column(3,
                uiOutput(ns("year.choice")))),
       fluidRow(
         column(12,
@@ -33,6 +35,8 @@ simpleView=function(id,input=NULL,output=NULL,ui=T,cx=NULL){
     
     
   } else {
+    
+    print("boo")
     
     years=reactive({
       
@@ -64,7 +68,7 @@ simpleView=function(id,input=NULL,output=NULL,ui=T,cx=NULL){
       out
     })
     
-    dataView=reactive({
+    dataView0=reactive({
       thisEndpoint=input[[ns("endpoint.selection")]]
       thisYear=input[[ns("year.selection")]]
       
@@ -75,12 +79,40 @@ simpleView=function(id,input=NULL,output=NULL,ui=T,cx=NULL){
       }
     })
     
+    genders=reactive({
+      a=dataView0()
+      if (!is.null(a)){
+        unique(a$sex)
+      } else {
+        NULL
+      }
+    })
+    
+    
+    dataView=reactive({
+      a=dataView0()
+      if (!is.null(a)){
+        subset(a,sex==input[[ns("gender.selection")]])
+      } else {
+        NULL
+      }
+      
+    })
+    
     output[[ns("endpoint.choice")]]=renderUI({
       print(endpoints())
       selectInput(ns("endpoint.selection"),
                   label="measure",
                   choices=endpoints())
     }) 
+    
+    output[[ns("gender.choice")]]=renderUI({
+      print(genders())
+      selectInput(ns("gender.selection"),
+                  label="gender",
+                  choices=genders())
+    }) 
+    
     
     output[[ns("year.choice")]]=renderUI({
       selectInput(ns("year.selection"),
@@ -105,8 +137,8 @@ simpleView=function(id,input=NULL,output=NULL,ui=T,cx=NULL){
                   subtitle=a[1,"year"])
       }
       
-
-      })
+      
+    })
     
   }
 }
