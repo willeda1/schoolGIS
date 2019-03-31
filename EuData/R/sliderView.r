@@ -25,6 +25,7 @@ sliderView=function(id,input=NULL,output=NULL,ui=T,cx=NULL){
     sidebarLayout(
       sidebarPanel(
         uiOutput(ns("endpoint.choice")),
+        uiOutput(ns("gender.choice")),
         uiOutput(ns("year.choice")),
         uiOutput(ns("slider.widget")),
         htmlOutput(ns("summary"))
@@ -64,16 +65,46 @@ sliderView=function(id,input=NULL,output=NULL,ui=T,cx=NULL){
       out
     })
     
-    dataView=reactive({
+    dataView0=reactive({
       thisEndpoint=input[[ns("endpoint.selection")]]
       thisYear=input[[ns("year.selection")]]
       
       if (any(is.null(c(thisEndpoint,thisYear)))){
         NULL
       } else {
+        subset(cx$data, year == thisYear & code == thisEndpoint)
+      }
+    })
+    
+    genders=reactive({
+      a=dataView0()
+      if (!is.null(a)){
+        unique(a$sex)
+      } else {
+        NULL
+      }
+    })
+    
+    output[[ns("gender.choice")]]=renderUI({
+      print(genders())
+      selectInput(ns("gender.selection"),
+                  label="gender",
+                  choices=genders())
+    }) 
+    
+    
+    
+    dataView=reactive({
+      thisEndpoint=input[[ns("endpoint.selection")]]
+      thisYear=input[[ns("year.selection")]]
+      thisGender=input[[ns("gender.selection")]]
+      
+      if (any(is.null(c(thisEndpoint,thisYear)))){
+        NULL
+      } else {
         subset(cx$data, year == thisYear & 
                  code == thisEndpoint &
-                 sex == "ALL"
+                 sex == thisGender
                )
       }
     })
